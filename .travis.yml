@@ -1,0 +1,11 @@
+language: go
+os:
+  - linux
+go:
+- '1.9'
+install:
+- make deps
+script:
+- make check
+- make
+- make test
