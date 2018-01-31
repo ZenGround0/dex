@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	cid "github.com/ipfs/go-cid"
 	blocks "github.com/ipfs/go-block-format"
+	cid "github.com/ipfs/go-cid"
 )
 
 var ErrNotFound = errors.New("blockstore: block not found")
@@ -24,8 +24,7 @@ var ErrNotFound = errors.New("blockstore: block not found")
 // DeleteBlock returns an ErrNotFound
 //
 // HashOnRead is a noop regardless of argument
-type Pblockstore struct {}
-
+type Pblockstore struct{}
 
 // Put prints out the block's representation string
 func (pbs *Pblockstore) Put(block blocks.Block) error {
@@ -50,8 +49,8 @@ func (pbs *Pblockstore) Has(c *cid.Cid) (bool, error) {
 }
 
 // Get returns ErrNotFound
-func (pbs *Pblockstore) Get(c *cid.Cid) error {
-	return ErrNotFound
+func (pbs *Pblockstore) Get(c *cid.Cid) (blocks.Block, error) {
+	return nil, ErrNotFound
 }
 
 // DeleteBlock is a noop and returns ErrNotFound
@@ -71,7 +70,7 @@ func (pbs *Pblockstore) AllKeysChan(ctx context.Context) (<-chan *cid.Cid, error
 		defer func() {
 			close(output)
 		}()
-		select  {
+		select {
 		case <-ctx.Done():
 			return
 		}

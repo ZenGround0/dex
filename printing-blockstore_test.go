@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 	"time"
-	
+
 	blocks "github.com/ipfs/go-block-format"
 	cid "github.com/ipfs/go-cid"
 )
@@ -26,6 +26,7 @@ Because we know we can't be found
 I'd like to be under the sea
 In an octopus' garden in the shade
 `)
+
 // Helper function to check that the blockstore behaves as expected with
 // and without preceding block puts
 func helperDummyOps(t *testing.T, pbs Pblockstore, testCid *cid.Cid) {
@@ -36,8 +37,8 @@ func helperDummyOps(t *testing.T, pbs Pblockstore, testCid *cid.Cid) {
 	if err != nil {
 		t.Error(err)
 	}
-	err = pbs.Get(testCid)
-	if err != ErrNotFound {
+	blks, err := pbs.Get(testCid)
+	if err != ErrNotFound || blks != nil {
 		t.Error("Get must always report not found")
 	}
 	err = pbs.DeleteBlock(testCid)
@@ -67,14 +68,14 @@ func TestAllKeysChan(t *testing.T) {
 		t.Fatal(err)
 	}
 	select {
-	case <- outchan:
+	case <-outchan:
 		t.Error("should not be able to read from outchan")
-	case <- ctx.Done():
+	case <-ctx.Done():
 		return
 	}
 }
 
-func ExamplePut()  {
+func ExamplePut() {
 	pbs := Pblockstore{}
 	testBlock := blocks.NewBlock(testData)
 	pbs.Put(testBlock)
@@ -100,4 +101,3 @@ func TestOpsAfterPut(t *testing.T) {
 	pbs.Put(testBlock)
 	helperDummyOps(t, pbs, testCid)
 }
-
