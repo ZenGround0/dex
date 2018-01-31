@@ -23,7 +23,9 @@ func ImportToPrint(file files.File) error {
 	// dummy GC locker [√] -- normal GCLocker
 	// dummy exchange [√]   -- offline.exchange
 	// DUMMY PINNING [√]  -- nil for now
-	pbs := &Pblockstore{} // This "stores" blocks by printing them to stdout
+	pbs := &Pblockstore{
+		membership: make(map[string]bool),
+	} // This "stores" blocks by printing them to stdout
 	locker := bstore.NewGCLocker()
 	addblockstore := bstore.NewGCBlockstore(pbs, locker)
 
@@ -38,16 +40,17 @@ func ImportToPrint(file files.File) error {
 	// pinning := nil
 	ctx := context.Background() // using background for now, should upgrade later
 	fileAdder, err := coreunix.NewAdder(ctx, nil, addblockstore, dserv)
+	if err != nil {
+		return err
+	}
 
 	// add the file
 	if err := fileAdder.AddFile(file); err != nil {
 		return err
 	}
 
-	// copy intermediate nodes from editor to our actual dagservice
-	// TODO: I still need to understand why this is necessary
-	// the way forward is to figure out why mfs is being used and
-	// look at mfs code
+	// Without this call all of the directory nodes (stored in MFS) do not get
+	// written through to the dagservice and its blockstore
 	_, err = fileAdder.Finalize()
 	return err
 

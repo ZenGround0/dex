@@ -24,10 +24,14 @@ var ErrNotFound = errors.New("blockstore: block not found")
 // DeleteBlock returns an ErrNotFound
 //
 // HashOnRead is a noop regardless of argument
-type Pblockstore struct{}
+type Pblockstore struct {
+	membership map[string]bool
+}
 
 // Put prints out the block's representation string
 func (pbs *Pblockstore) Put(block blocks.Block) error {
+	id := block.Cid().String()
+	pbs.membership[id] = true
 	fmt.Printf("%s\n", block.String())
 	return nil
 }
@@ -45,7 +49,8 @@ func (pbs *Pblockstore) PutMany(blocks []blocks.Block) error {
 
 // Has returns false
 func (pbs *Pblockstore) Has(c *cid.Cid) (bool, error) {
-	return false, nil
+	_, ok := pbs.membership[c.String()]
+	return ok, nil
 }
 
 // Get returns ErrNotFound
