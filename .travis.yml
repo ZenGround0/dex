@@ -6,6 +6,7 @@ go:
 install:
 - make deps
 script:
+- go get github.com/ipfs/go-ipfs
 - make check
 - make
 - make test
