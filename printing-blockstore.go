@@ -8,20 +8,20 @@ import (
 	cid "github.com/ipfs/go-cid"
 )
 
-var ErrNotFound = errors.New("blockstore: block not found")
+var errNotFound = errors.New("blockstore: block not found")
 
 // Pblockstore is a dummy blockstore used for testing and sanity checks.
 //
 // It responds to Put and PutMany calls by printing out the blocks
 // of data.
 //
-// Has returns false, even if Put was called on a block with this cid
+// Has returns true iff Put was previously called on a block with this cid
 //
 // AllKeysChan blocks indefinitely
 //
-// Get returns an ErrNotFound even if block was previously Put
+// Get returns an errNotFound even if block was previously Put
 //
-// DeleteBlock returns an ErrNotFound
+// DeleteBlock returns an errNotFound
 //
 // HashOnRead is a noop regardless of argument
 type Pblockstore struct {
@@ -47,20 +47,20 @@ func (pbs *Pblockstore) PutMany(blocks []blocks.Block) error {
 	return nil
 }
 
-// Has returns false
+// Has returns true if this cid has been put previously
 func (pbs *Pblockstore) Has(c *cid.Cid) (bool, error) {
 	_, ok := pbs.membership[c.String()]
 	return ok, nil
 }
 
-// Get returns ErrNotFound
+// Get returns errNotFound
 func (pbs *Pblockstore) Get(c *cid.Cid) (blocks.Block, error) {
-	return nil, ErrNotFound
+	return nil, errNotFound
 }
 
-// DeleteBlock is a noop and returns ErrNotFound
+// DeleteBlock is a noop and returns errNotFound
 func (pbs *Pblockstore) DeleteBlock(c *cid.Cid) error {
-	return ErrNotFound
+	return errNotFound
 }
 
 // HashOnRead is a noop

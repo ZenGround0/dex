@@ -11,8 +11,8 @@ import (
 	dag "github.com/ipfs/go-ipfs/merkledag"
 )
 
-// A first step to a streaming importer.  Verify that we can hijack the
-// blockstore abstraction to redirect blocks as they arrive
+// ImportToPrint is a first step towards a streaming importer.  Verify that we
+// can hijack the blockstore abstraction to redirect blocks as they arrive
 // Closely follows go-ipfs/core/commands/add.go: Run func
 func ImportToPrint(file files.File) error {
 	// Init objects needed by adder

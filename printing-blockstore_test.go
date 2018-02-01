@@ -38,11 +38,11 @@ func helperDummyOps(t *testing.T, pbs *Pblockstore, testCid *cid.Cid, shouldHave
 		t.Error(err)
 	}
 	blks, err := pbs.Get(testCid)
-	if err != ErrNotFound || blks != nil {
+	if err != errNotFound || blks != nil {
 		t.Error("Get must always report not found")
 	}
 	err = pbs.DeleteBlock(testCid)
-	if err != ErrNotFound {
+	if err != errNotFound {
 		t.Error("DeleteBlock must always report not found")
 	}
 }
@@ -81,14 +81,14 @@ func TestAllKeysChan(t *testing.T) {
 	}
 }
 
-func ExamplePut() {
+func ExamplePblockstore_Put() {
 	pbs := newPbs()
 	testBlock := blocks.NewBlock(testData)
 	pbs.Put(testBlock)
 	// Output: [Block QmYmYZFATBaAWTGRL4Koe8hsHYFPwAKTYTqwWNH6Urp9sg]
 }
 
-func ExamplePutMany() {
+func ExamplePblockstore_PutMany() {
 	pbs := newPbs()
 	testBlock := blocks.NewBlock(testData)
 	testBlockB := blocks.NewBlock(testDataB)
