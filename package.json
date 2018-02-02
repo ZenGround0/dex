@@ -31,9 +31,9 @@
       "version": "0.5.3"
     },
     {
-      "hash": "QmViBzgruNUoLNBnXcx8YWbDNwV8MNGEGKkLo6JGetygdw",
+      "hash": "QmPdQ62wr7TKSa2BwHMAHm1ispjxhp8QW6VYc2CWKbbgbd",
       "name": "go-ipfs",
-      "version": "0.4.13"
+      "version": "0.4.14-dev"
     }
   ],
   "gxVersion": "0.11.0",

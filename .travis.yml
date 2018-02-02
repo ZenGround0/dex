@@ -4,7 +4,6 @@ os:
 go:
 - '1.9'
 install:
-- go get github.com/ipfs/go-ipfs
 - go get github.com/golang/lint/golint
 - make deps
 script:
