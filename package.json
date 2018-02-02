@@ -23,6 +23,12 @@
       "hash": "Qmej7nf81hi2x2tvjRBF3mcp74sQyuDH4VMYDGd1YtXjb2",
       "name": "go-block-format",
       "version": "0.1.6"
+    },
+    {
+      "author": "whyrusleeping",
+      "hash": "Qme5bWv7wtjUNGsK2BNGVUFPKiuxWrsqrtvYwCLRw8YFES",
+      "name": "go-ipld-format",
+      "version": "0.5.3"
     }
   ],
   "gxVersion": "0.11.0",
