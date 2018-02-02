@@ -51,7 +51,6 @@ func (ods *outDAGService) Add(ctx context.Context, node ipld.Node) error {
 		close(ods.outChan)
 		return errors.New("canceled context preempted dagservice add")
 	}
-	return nil
 }
 
 func (ods *outDAGService) AddMany(ctx context.Context, nodes []ipld.Node) error {
