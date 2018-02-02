@@ -1,12 +1,14 @@
 package dex
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path"
 	"testing"
 
 	"github.com/ipfs/go-ipfs-cmdkit/files"
+	ipld "github.com/ipfs/go-ipld-format"
 )
 
 const testDir = "testingData"
@@ -32,6 +34,25 @@ func TestImportPrint(t *testing.T) {
 		t.Fatal(err)
 	}
 	err = ImportToPrint(file)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+// import and receive all blocks
+func TestImportChannel(t *testing.T) {
+	file, err := getTestingDir()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	outChan := make(chan *ipld.Node)
+	go func() {
+		for node := range outChan {
+			fmt.Printf("%s\n", (*node).String())
+		}
+	}()
+	err = ImportToChannel(file, outChan, context.Background())
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/ipfs/go-ipfs-cmdkit/files"
 	"github.com/ipfs/go-ipfs/core/coreunix"
+	ipld "github.com/ipfs/go-ipld-format"
 )
 
 // ImportToPrint is a first step towards a streaming importer.  Verify that we
@@ -45,4 +46,30 @@ func ImportToPrint(file files.File) error {
 	//
 	// TODO: Will the streaming blockstore use a channel or something else, like
 	// libp2p streams?
+}
+
+// ImportToChannel imports file to ipfs ipld nodes, outputting nodes on the
+// provided channel
+func ImportToChannel(file files.File, outChan chan<- *ipld.Node, ctx context.Context) error {
+	dserv := &outDAGService{
+		membership: make(map[string]bool),
+		outChan:    outChan,
+	}
+
+	fileAdder, err := coreunix.NewAdder(ctx, nil, nil, dserv)
+	if err != nil {
+		return err
+	}
+	fileAdder.Pin = false
+
+	if err := fileAdder.AddFile(file); err != nil {
+		return err
+	}
+
+	_, err = fileAdder.Finalize()
+	if !strings.Contains(err.Error(), "dagservice: block not found") {
+		return err
+	}
+	close(outChan)
+	return nil
 }
