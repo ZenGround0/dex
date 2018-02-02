@@ -29,6 +29,11 @@
       "hash": "Qme5bWv7wtjUNGsK2BNGVUFPKiuxWrsqrtvYwCLRw8YFES",
       "name": "go-ipld-format",
       "version": "0.5.3"
+    },
+    {
+      "hash": "QmViBzgruNUoLNBnXcx8YWbDNwV8MNGEGKkLo6JGetygdw",
+      "name": "go-ipfs",
+      "version": "0.4.13"
     }
   ],
   "gxVersion": "0.11.0",
