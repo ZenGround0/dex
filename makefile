@@ -39,7 +39,7 @@ gx: $(gx_bin) $(gx-go_bin)
 
 deps: gx
 	$(gx_bin) install --global
-	$(gx-go_bin) --verbose rewrite
+	$(gx-go_bin) rewrite
 
 check:
 	go vet ./...
