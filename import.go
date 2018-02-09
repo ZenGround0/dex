@@ -51,7 +51,7 @@ func ImportToPrint(f files.File) error {
 
 // ImportToChannel imports file to ipfs ipld nodes, outputting nodes on the
 // provided channel
-func ImportToChannel(file files.File, outChan chan<- *ipld.Node, ctx context.Context) error {
+func ImportToChannel(f files.File, outChan chan<- *ipld.Node, ctx context.Context) error {
 	dserv := &outDAGService{
 		membership: make(map[string]bool),
 		outChan:    outChan,
@@ -63,8 +63,18 @@ func ImportToChannel(file files.File, outChan chan<- *ipld.Node, ctx context.Con
 	}
 	fileAdder.Pin = false
 
-	if err := fileAdder.AddFile(file); err != nil {
-		return err
+	// add all files under the root, as in ipfs
+	for {
+		file, err := f.NextFile()
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			return err
+		}
+
+		if err := fileAdder.AddFile(file); err != nil {
+			return err
+		}
 	}
 
 	_, err = fileAdder.Finalize()
